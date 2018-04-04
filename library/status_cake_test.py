@@ -5,7 +5,7 @@ import requests
 
 class StatusCake:
 
-    def __init__(self, module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location):
+    def __init__(self, module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
@@ -21,6 +21,7 @@ class StatusCake:
         self.follow_redirect = follow_redirect
         self.trigger_rate = trigger_rate
         self.final_location = final_location
+        self.find_string = find_string
 
     def check_response(self,resp):
         if resp['Success'] == False:
@@ -42,7 +43,7 @@ class StatusCake:
         data = {"WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate,
                     "TestType": self.test_type, "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
                     "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
-                    "FinalEndpoint": self.final_location}
+                    "FinalEndpoint": self.final_location, "FindString" : self.find_string}
 
         test_id = self.check_test()
         
@@ -71,7 +72,8 @@ def main():
         "contact": {"required": False, "type": "int"},
         "port": {"required": False, "type": "int"},
         "user_agent": {"required": False, "default":"StatusCake Agent", "type": "str"},
-        "final_location": {"required": False, "type": "str"}
+        "final_location": {"required": False, "type": "str"},
+        "find_string": {"required": False, "type": "str"}
     }   
 
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
@@ -91,9 +93,9 @@ def main():
     follow_redirect = module.params['follow_redirect']
     trigger_rate = module.params['trigger_rate']
     final_location = module.params['final_location']
+    find_string = module.params['find_string']
 
-
-    test_object = StatusCake(module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location)
+    test_object = StatusCake(module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string)
     test_object.create_test()
 
 if __name__ == '__main__':  
