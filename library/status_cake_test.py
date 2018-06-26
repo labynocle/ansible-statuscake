@@ -5,17 +5,21 @@ import requests
 
 class StatusCake:
 
-    def __init__(self, module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, custom_header):
+    def __init__(self, module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, custom_header, status_codes, node_locations, follow_redirect, trigger_rate):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
         self.url = url
         self.test_tags = test_tags
+        self.status_codes = status_codes
+        self.node_locations = node_locations
         self.test_type = test_type
         self.contact = contact
         self.tcp_port = tcp_port
         self.custom_header = custom_header
         self.check_rate = check_rate
+        self.follow_redirect = follow_redirect
+        self.trigger_rate = trigger_rate
 
     def check_response(self,resp):
         if resp['Success'] == False:
@@ -35,8 +39,8 @@ class StatusCake:
     def create_test(self):
         API_URL = "https://app.statuscake.com/API/Tests/Update"
         data = {"WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate,
-                    "TestType": self.test_type, "TestTags": self.test_tags, "ContactGroup": self.contact,
-                    "Port": self.tcp_port, "CustomHeader": self.custom_header}
+                    "TestType": self.test_type, "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
+                    "Port": self.tcp_port, "CustomHeader": self.custom_header, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate}
 
         test_id = self.check_test()
         
@@ -56,11 +60,15 @@ def main():
         "name": {"required": True, "type": "str"},
         "url": {"required": True, "type": "str"},
         "test_tags": {"required": False, "type": "str"},
+        "status_codes": {"required": False, "type": "str"},
+        "node_locations": {"required": False, "type": "str"},
+        "follow_redirect": {"required": False, "type": "str"},
+        "trigger_rate": {"required": False, "type": "str"},
         "check_rate": {"required": False, "default": 300, "type": "int"},
-        "test_type": {"required": False, "choices": ['HTTP', 'TCP'],"type": "str"},
+        "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'],"type": "str"},
         "contact": {"required": False, "type": "int"},
         "port": {"required": False, "type": "int"},
-        "user_agent": {"required": False, "default":"Fake Agent", "type": "str"}
+        "user_agent": {"required": False, "default":"StatusCake Agent", "type": "str"}
     }   
 
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
@@ -70,13 +78,18 @@ def main():
     name = module.params['name']
     url = module.params['url']
     test_tags = module.params['test_tags']
+    status_codes = module.params['status_codes']
+    node_locations = module.params['node_locations']
     check_rate = module.params['check_rate']
     test_type = module.params['test_type']
     contact = module.params['contact']
     tcp_port = module.params['port']
     custom_header = '{"User-Agent":"' + module.params['user_agent'] + '"}'
+    follow_redirect = module.params['follow_redirect']
+    trigger_rate = module.params['trigger_rate']
 
-    test_object = StatusCake(module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, custom_header)
+
+    test_object = StatusCake(module, username, api_key, name, url, test_tags, check_rate, test_type, contact, tcp_port, custom_header, status_codes, node_locations, follow_redirect, trigger_rate)
     test_object.create_test()
 
 if __name__ == '__main__':  
