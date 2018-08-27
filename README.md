@@ -1,6 +1,6 @@
 # Ansible-statuscake
 
-This ansible module setups a HTTP/TCP/PING test via [StatusCake](https://www.statuscake.com) API. 
+This ansible module setups/deletes a HTTP/TCP/PING test via [StatusCake](https://www.statuscake.com) API. 
 
 ## Requirements
 
