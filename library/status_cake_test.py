@@ -1,11 +1,12 @@
 #!/usr/bin/python
-
-from ansible.module_utils.basic import *
 import requests
+from ansible.module_utils.basic import *  # noqa: F403
+
 
 class StatusCake:
 
-    def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header):
+    def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
+                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
@@ -25,8 +26,8 @@ class StatusCake:
         self.find_string = find_string
         self.custom_header = custom_header
 
-    def check_response(self,resp):
-        if resp['Success'] == False:
+    def check_response(self, resp):
+        if resp['Success'] is False:
             self.module.exit_json(changed=False, meta=resp['Message'])
         else:
             self.module.exit_json(changed=True, meta=resp['Message'])
@@ -41,50 +42,52 @@ class StatusCake:
                 return item['TestID']
 
     def manage_test(self):
-        data = {"WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate,
-                    "TestType": self.test_type, "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
-                    "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
-                    "FinalEndpoint": self.final_location, "FindString" : self.find_string, "CustomHeader" : self.custom_header}
+        data = {
+            "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
+            "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
+            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
+            "FinalEndpoint": self.final_location, "FindString": self.find_string, "CustomHeader" : self.custom_header
+        }
 
         test_id = self.check_test()
 
         if self.state == 'present':
             if test_id:
-               data['TestID'] = test_id
+                data['TestID'] = test_id
             API_URL = "https://app.statuscake.com/API/Tests/Update"
             response = requests.put(API_URL, headers=self.headers, data=data)
         elif self.state == 'absent':
-             if not test_id:
-                 self.module.exit_json(changed=False, meta='No test to delete with the specified name')
-             data['TestID'] = test_id
-             API_URL = "https://app.statuscake.com/API/Tests/Details"
-             response = requests.delete(API_URL, headers=self.headers, data=data)
+            if not test_id:
+                self.module.exit_json(changed=False, meta='No test to delete with the specified name')
+            data['TestID'] = test_id
+            API_URL = "https://app.statuscake.com/API/Tests/Details"
+            response = requests.delete(API_URL, headers=self.headers, data=data)
         self.check_response(response.json())
 
-def main():
 
+def main():
     fields = {
         "username": {"required": True, "type": "str"},
         "api_key": {"required": True, "type": "str"},
         "name": {"required": True, "type": "str"},
         "url": {"required": True, "type": "str"},
-        "state": {"required": True, "choices": ['present', 'absent'],"type": "str"},
+        "state": {"required": True, "choices": ['present', 'absent'], "type": "str"},
         "test_tags": {"required": False, "type": "str"},
         "status_codes": {"required": False, "type": "str"},
         "node_locations": {"required": False, "type": "str"},
         "follow_redirect": {"required": False, "type": "str"},
         "trigger_rate": {"required": False, "type": "str"},
         "check_rate": {"required": False, "default": 300, "type": "int"},
-        "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'],"type": "str"},
+        "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'], "type": "str"},
         "contact": {"required": False, "type": "int"},
         "port": {"required": False, "type": "int"},
-        "user_agent": {"required": False, "default":"StatusCake Agent", "type": "str"},
+        "user_agent": {"required": False, "default": "StatusCake Agent", "type": "str"},
         "final_location": {"required": False, "type": "str"},
         "find_string": {"required": False, "type": "str"},
         "custom_header": {"required": False, "type": "str"}
     }
 
-    module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=fields, supports_check_mode=True)  # noqa: F405
 
     username = module.params['username']
     api_key = module.params['api_key']
@@ -105,8 +108,10 @@ def main():
     find_string = module.params['find_string']
     custom_header = module.params['custom_header']
 
-    test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header)
+    test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
+                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header)
     test_object.manage_test()
+
 
 if __name__ == '__main__':
     main()
