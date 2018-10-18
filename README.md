@@ -13,9 +13,8 @@ Just copy the **library/status_cake_test.py** in your playbook folder
 ## Example usage:
 
 ```
-- hosts: localhost
-  vars_files:
-    - "dict_example.yml"
+- hosts:      localhost
+  vars_files: "dict_example.yml"
 
   tasks:
     - name: Create StatusCake test
@@ -30,11 +29,12 @@ Just copy the **library/status_cake_test.py** in your playbook folder
         check_rate:      300                                  # The number of seconds between checks
         trigger_rate:    5                                    # How many minutes to wait before sending an alert
         user_agent:      "Status Cake Monitoring"             # Use to populate the test with a custom user agent
+        custom_header:   '{"FakeHeader":"Empty"}'             # Custom HTTP header, must be supplied as JSON
         status_codes:    "200,204,205"                        # Comma seperated list of statusCodes to trigger error
         node_locations:  "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
         follow_redirect: 1                                    # Use to specify whether redirects should be followed, set to 1 to enable
         contact:         "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
-      with_dict: "{{ example }}"
+      with_dict:         "{{ example }}"
 ```
 
 ## Links
@@ -44,3 +44,4 @@ Just copy the **library/status_cake_test.py** in your playbook folder
 ## TODO
 * Role for Ansible galaxy
 * Edge cases
+* Add tests on some configurations (like json for `custom_header`)
