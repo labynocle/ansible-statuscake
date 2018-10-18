@@ -30,7 +30,7 @@ class StatusCake:
             self.module.exit_json(changed=False, meta=resp['Message'])
         else:
             self.module.exit_json(changed=True, meta=resp['Message'])
-            
+
     def check_test(self):
         API_URL = "https://app.statuscake.com/API/Tests"
         response = requests.put(API_URL, headers=self.headers)
@@ -39,7 +39,7 @@ class StatusCake:
         for item in json_object:
             if item['WebsiteName'] == self.name:
                 return item['TestID']
-                    
+
     def manage_test(self):
         data = {"WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate,
                     "TestType": self.test_type, "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
@@ -62,7 +62,7 @@ class StatusCake:
         self.check_response(response.json())
 
 def main():
-    
+
     fields = {
         "username": {"required": True, "type": "str"},
         "api_key": {"required": True, "type": "str"},
@@ -82,10 +82,10 @@ def main():
         "final_location": {"required": False, "type": "str"},
         "find_string": {"required": False, "type": "str"},
         "custom_header": {"required": False, "type": "str"}
-    }   
+    }
 
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
-    
+
     username = module.params['username']
     api_key = module.params['api_key']
     name = module.params['name']
@@ -108,5 +108,5 @@ def main():
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent, status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header)
     test_object.manage_test()
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
     main()
