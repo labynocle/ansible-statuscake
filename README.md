@@ -29,7 +29,9 @@ Just copy the **library/status_cake_test.py** in your playbook folder
         check_rate:      300                                  # The number of seconds between checks
         trigger_rate:    5                                    # How many minutes to wait before sending an alert
         user_agent:      "Status Cake Monitoring"             # Use to populate the test with a custom user agent
-        custom_header:   '{"FakeHeader":"Empty"}'             # Custom HTTP header, must be supplied as JSON
+        custom_header:                                        # Custom HTTP header, must be dict which will be sent as a JSON to StatusCake
+          Header01: Plop
+          Header02: Plip
         status_codes:    "200,204,205"                        # Comma seperated list of statusCodes to trigger error
         node_locations:  "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
         follow_redirect: 1                                    # Use to specify whether redirects should be followed, set to 1 to enable

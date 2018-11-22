@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import json
+
 import requests
 from ansible.module_utils.basic import *  # noqa: F403
 
@@ -46,7 +48,7 @@ class StatusCake:
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
             "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
             "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
-            "FinalEndpoint": self.final_location, "FindString": self.find_string, "CustomHeader" : self.custom_header
+            "FinalEndpoint": self.final_location, "FindString": self.find_string, "CustomHeader": self.custom_header
         }
 
         test_id = self.check_test()
@@ -84,7 +86,7 @@ def main():
         "user_agent": {"required": False, "default": "StatusCake Agent", "type": "str"},
         "final_location": {"required": False, "type": "str"},
         "find_string": {"required": False, "type": "str"},
-        "custom_header": {"required": False, "type": "str"}
+        "custom_header": {"required": False, "type": "dict"}
     }
 
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)  # noqa: F405
@@ -107,6 +109,8 @@ def main():
     final_location = module.params['final_location']
     find_string = module.params['find_string']
     custom_header = module.params['custom_header']
+
+    custom_header = json.dumps(custom_header)
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
                              status_codes, node_locations, follow_redirect, trigger_rate, final_location, find_string, custom_header)
