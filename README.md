@@ -36,6 +36,8 @@ Just copy the **library/status_cake_test.py** in your playbook folder
         node_locations:  "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
         follow_redirect: 1                                    # Use to specify whether redirects should be followed, set to 1 to enable
         contact:         "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
+        #find_string:    "plop"                               # A string that should either be found or not found.
+        #do_not_find:    0                                    # If the above string should be found to trigger a alert. 1 = will trigger if FindString found
       with_dict:         "{{ example }}"
 ```
 
