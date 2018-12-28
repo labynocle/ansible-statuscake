@@ -45,6 +45,30 @@ Just copy the **library/status_cake_test.py** in your playbook folder
 
 * [StatusCake API Doc](https://www.statuscake.com/api/Tests/Updating%20Inserting%20and%20Deleting%20Tests.md)
 
+## Tips / Dirty quick win
+
+### How to use `post_raw` with a JSON
+
+Your `post_raw` ansible variable should be declared with a leading space:
+
+```
+my_post_raw: ' {"field1":"result1"}'
+my_custom_headers:
+  Content-Type: "application/json"
+```
+
+The leading space causes Ansible to not treat your string as JSON
+
+Then you can use `my_post_raw` in your `status_cake_test` task without problem as following:
+
+```
+status_cake_test:
+  ...
+  custom_header: "{{ my_custom_headers }}"
+  post_raw:      "{{ my_post_raw }}"
+```
+
+
 ## TODO
 * Role for Ansible galaxy
 * Edge cases
