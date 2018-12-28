@@ -8,7 +8,7 @@ from ansible.module_utils.basic import *  # noqa: F403
 class StatusCake:
 
     def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find,find_string, custom_header):
+                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find,find_string, custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
@@ -28,6 +28,8 @@ class StatusCake:
         self.do_not_find = do_not_find
         self.find_string = find_string
         self.custom_header = custom_header
+        self.post_body = post_body
+        self.post_raw = post_raw
 
     def check_response(self, resp):
         if resp['Success'] is False:
@@ -49,7 +51,8 @@ class StatusCake:
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
             "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
             "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
-            "FinalEndpoint": self.final_location, "DoNotFind":self.do_not_find, "FindString": self.find_string, "CustomHeader": self.custom_header
+            "FinalEndpoint": self.final_location, "DoNotFind":self.do_not_find, "FindString": self.find_string, "CustomHeader": self.custom_header,
+            "PostBody": self.post_body, "PostRaw": self.post_raw
         }
 
         test_id = self.check_test()
@@ -88,7 +91,9 @@ def main():
         "final_location": {"required": False, "type": "str"},
         "do_not_find": {"required": False, "type": "int"},
         "find_string": {"required": False, "type": "str"},
-        "custom_header": {"required": False, "type": "dict"}
+        "custom_header": {"required": False, "type": "dict"},
+        "post_raw": {"required": False, "type": "str"},
+        "post_body": {"required": False, "type": "dict"}
     }
 
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)  # noqa: F405
@@ -112,11 +117,14 @@ def main():
     do_not_find = module.params['do_not_find']
     find_string = module.params['find_string']
     custom_header = module.params['custom_header']
+    post_body = module.params['post_body']
+    post_raw = module.params['post_raw']
 
     custom_header = json.dumps(custom_header)
+    post_body = json.dumps(post_body)
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string, custom_header)
+                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string, custom_header, post_body, post_raw)
     test_object.manage_test()
 
 
