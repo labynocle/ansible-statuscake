@@ -36,12 +36,38 @@ Just copy the **library/status_cake_test.py** in your playbook folder
         node_locations:  "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
         follow_redirect: 1                                    # Use to specify whether redirects should be followed, set to 1 to enable
         contact:         "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
+        #find_string:    "plop"                               # A string that should either be found or not found.
+        #do_not_find:    0                                    # If the above string should be found to trigger a alert. 1 = will trigger if FindString found
       with_dict:         "{{ example }}"
 ```
 
 ## Links
 
 * [StatusCake API Doc](https://www.statuscake.com/api/Tests/Updating%20Inserting%20and%20Deleting%20Tests.md)
+
+## Tips / Dirty quick win
+
+### How to use `post_raw` with a JSON
+
+Your `post_raw` ansible variable should be declared with a leading space:
+
+```
+my_post_raw: ' {"field1":"result1"}'
+my_custom_headers:
+  Content-Type: "application/json"
+```
+
+The leading space causes Ansible to not treat your string as JSON
+
+Then you can use `my_post_raw` in your `status_cake_test` task without problem as following:
+
+```
+status_cake_test:
+  ...
+  custom_header: "{{ my_custom_headers }}"
+  post_raw:      "{{ my_post_raw }}"
+```
+
 
 ## TODO
 * Role for Ansible galaxy
