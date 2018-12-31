@@ -1,14 +1,13 @@
 #!/usr/bin/python
-import json
-
 import requests
-from ansible.module_utils.basic import *  # noqa: F403
+import json
+from ansible.module_utils.basic import AnsibleModule
 
 
 class StatusCake:
-
     def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find,find_string, custom_header, post_body, post_raw):
+                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
+				 custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
@@ -51,9 +50,12 @@ class StatusCake:
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
             "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
             "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
-            "FinalEndpoint": self.final_location, "DoNotFind":self.do_not_find, "FindString": self.find_string, "CustomHeader": self.custom_header,
-            "PostBody": self.post_body, "PostRaw": self.post_raw
+            "FinalEndpoint": self.final_location, "DoNotFind": self.do_not_find, "FindString": self.find_string, "PostRaw": self.post_raw
         }
+        if self.custom_header:
+            data['CustomHeader'] = self.custom_header
+        if self.post_body:
+            data['PostBody'] = self.post_body
 
         test_id = self.check_test()
 
@@ -96,7 +98,7 @@ def main():
         "post_body": {"required": False, "type": "dict"}
     }
 
-    module = AnsibleModule(argument_spec=fields, supports_check_mode=True)  # noqa: F405
+    module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
 
     username = module.params['username']
     api_key = module.params['api_key']
@@ -120,11 +122,14 @@ def main():
     post_body = module.params['post_body']
     post_raw = module.params['post_raw']
 
-    custom_header = json.dumps(custom_header)
-    post_body = json.dumps(post_body)
+    if custom_header:
+        custom_header = json.dumps(custom_header)
+    if post_body:
+        post_body = json.dumps(post_body)
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string, custom_header, post_body, post_raw)
+                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
+							 custom_header, post_body, post_raw)
     test_object.manage_test()
 
 
