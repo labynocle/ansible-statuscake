@@ -1,13 +1,14 @@
 #!/usr/bin/python
-import requests
 import json
+
+import requests
 from ansible.module_utils.basic import AnsibleModule
 
 
 class StatusCake:
     def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
                  status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
-				 custom_header, post_body, post_raw):
+                 custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.name = name
@@ -129,7 +130,7 @@ def main():
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
                              status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
-							 custom_header, post_body, post_raw)
+                             custom_header, post_body, post_raw)
     test_object.manage_test()
 
 
