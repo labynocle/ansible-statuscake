@@ -28,6 +28,7 @@ Just copy the **library/status_cake_test.py** in your playbook folder
         test_type:       "HTTP"                               # What type of test type to use (HTTP/TCP/PING)
         check_rate:      300                                  # The number of seconds between checks
         trigger_rate:    5                                    # How many minutes to wait before sending an alert
+        confirmation:    5                                    # How many different servers are needed to confirm the downtime
         user_agent:      "Status Cake Monitoring"             # Use to populate the test with a custom user agent
         custom_header:                                        # Custom HTTP header, must be dict which will be sent as a JSON to StatusCake
           Header01: Plop

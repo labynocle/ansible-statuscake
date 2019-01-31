@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 class StatusCake:
     def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                 status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
+                 status_codes, node_locations, follow_redirect, trigger_rate, confirmation, final_location, do_not_find, find_string,
                  custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
@@ -24,6 +24,7 @@ class StatusCake:
         self.check_rate = check_rate
         self.follow_redirect = follow_redirect
         self.trigger_rate = trigger_rate
+        self.confirmation = confirmation
         self.final_location = final_location
         self.do_not_find = do_not_find
         self.find_string = find_string
@@ -50,7 +51,7 @@ class StatusCake:
         data = {
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
             "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
-            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate,
+            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate, "Confirmation": self.confirmation,
             "FinalEndpoint": self.final_location, "DoNotFind": self.do_not_find, "FindString": self.find_string, "PostRaw": self.post_raw
         }
         if self.custom_header:
@@ -86,6 +87,7 @@ def main():
         "node_locations": {"required": False, "type": "str"},
         "follow_redirect": {"required": False, "type": "str"},
         "trigger_rate": {"required": False, "type": "str"},
+        "confirmation": {"required": False, "type": "str"},
         "check_rate": {"required": False, "default": 300, "type": "int"},
         "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'], "type": "str"},
         "contact": {"required": False, "type": "int"},
@@ -116,6 +118,7 @@ def main():
     user_agent = module.params['user_agent']
     follow_redirect = module.params['follow_redirect']
     trigger_rate = module.params['trigger_rate']
+    confirmation = module.params['confirmation']
     final_location = module.params['final_location']
     do_not_find = module.params['do_not_find']
     find_string = module.params['find_string']
@@ -129,7 +132,7 @@ def main():
         post_body = json.dumps(post_body)
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                             status_codes, node_locations, follow_redirect, trigger_rate, final_location, do_not_find, find_string,
+                             status_codes, node_locations, follow_redirect, trigger_rate, confirmation, final_location, do_not_find, find_string,
                              custom_header, post_body, post_raw)
     test_object.manage_test()
 
