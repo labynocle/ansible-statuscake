@@ -1,6 +1,6 @@
 # Ansible-statuscake
 
-This ansible module setups/deletes a HTTP/TCP/PING test via [StatusCake](https://www.statuscake.com) API. 
+This Ansible module setups/deletes a HTTP/TCP/PING test via [StatusCake](https://www.statuscake.com) API. 
 
 ## Requirements
 
@@ -42,9 +42,6 @@ Just copy the **library/status_cake_test.py** in your playbook folder
       with_dict:         "{{ example }}"
 ```
 
-## Links
-
-* [StatusCake API Doc](https://www.statuscake.com/api/Tests/Updating%20Inserting%20and%20Deleting%20Tests.md)
 
 ## Tips / Dirty quick win
 
@@ -70,7 +67,14 @@ status_cake_test:
 ```
 
 
-## TODO
-* Role for Ansible galaxy
-* Edge cases
-* Add tests on some configurations (like json for `custom_header`)
+## ToDo and ideas
+
+- [ ] Role for Ansible galaxy
+- [ ] Edge cases
+- [ ] Add tests on some configurations and params (like json for `custom_header`)
+- [ ] [Manage SSL Tests](https://github.com/labynocle/ansible-statuscake/issues/5)
+
+
+## Links
+
+* [StatusCake API Doc](https://www.statuscake.com/api/Tests/Updating%20Inserting%20and%20Deleting%20Tests.md)
