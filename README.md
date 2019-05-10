@@ -5,7 +5,7 @@ This Ansible module setups/deletes a HTTP/TCP/PING test or a SSL certificate che
 ## Requirements
 
 Ansible >=2.1
-Python >=3.6
+Python >=3.4
 
 ## Installation
 

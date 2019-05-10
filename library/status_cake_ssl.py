@@ -6,8 +6,8 @@ from ansible.module_utils.basic import AnsibleModule
 
 
 class StatusCakeSSL:
-    def __init__(self, module, username, api_key, domain, state, check_rate, contact, alert_at, alert_expiry, alert_reminder, alert_broken,
-                 alert_mixed):
+    def __init__(self, module, username, api_key, domain, state, check_rate, contact,
+                 alert_at, alert_expiry, alert_reminder, alert_broken, alert_mixed):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
         self.domain = domain
@@ -37,8 +37,14 @@ class StatusCakeSSL:
 
     def manage_test(self):
         data = {
-            "domain": self.domain, "contact_groups": self.contact, "checkrate": self.check_rate, "alert_at": self.alert_at,
-            "alert_expiry": self.alert_expiry, "alert_reminder": self.alert_reminder, "alert_broken": self.alert_broken, "alert_mixed": self.alert_mixed
+            "domain": self.domain,
+            "contact_groups": self.contact,
+            "checkrate": self.check_rate,
+            "alert_at": self.alert_at,
+            "alert_expiry": self.alert_expiry,
+            "alert_reminder": self.alert_reminder,
+            "alert_broken": self.alert_broken,
+            "alert_mixed": self.alert_mixed
         }
 
         test_id = self.check_test()
@@ -51,7 +57,7 @@ class StatusCakeSSL:
         elif self.state == 'absent':
             if not test_id:
                 self.module.exit_json(changed=False, meta='No test to delete with the specified domain')
-            API_URL = "https://app.statuscake.com/API/SSL/Update?id="+test_id
+            API_URL = "https://app.statuscake.com/API/SSL/Update?id=" + test_id
             response = requests.delete(API_URL, headers=self.headers)
         self.check_response(response.json())
 
@@ -85,8 +91,9 @@ def main():
     alert_broken = module.params['alert_broken']
     alert_mixed = module.params['alert_mixed']
 
-    test_object = StatusCakeSSL(module, username, api_key, domain, state, check_rate, contact, alert_at, alert_expiry, alert_reminder, alert_broken,
-                             alert_mixed)
+    test_object = StatusCakeSSL(module, username, api_key, domain, state, check_rate, contact,
+                             alert_at, alert_expiry, alert_reminder, alert_broken, alert_mixed)
+
     test_object.manage_test()
 
 
