@@ -1,23 +1,24 @@
 # Ansible-statuscake
 
-This Ansible module setups/deletes a HTTP/TCP/PING test via [StatusCake](https://www.statuscake.com) API. 
+This Ansible module setups/deletes a HTTP/TCP/PING test or a SSL certificate check via the [StatusCake](https://www.statuscake.com) API.
 
 ## Requirements
 
 Ansible >=2.1
+Python >=3.4
 
 ## Installation
 
-Just copy the **library/status_cake_test.py** in your playbook folder
+Just copy the **library/status_cake_*.py** in your playbook folder
 
-## Example usage:
+## status_cake_test :: Example usage:
 
 ```
 - hosts:      localhost
   vars_files: "dict_example.yml"
 
   tasks:
-    - name: Create StatusCake test
+    - name: Create StatusCake tests
       status_cake_test:
         username:        "example_user"                       # StatusCake login name
         api_key:         "som3thing1se3cret"                  # StatusCake API key (cf: https://app.statuscake.com/APIKey.php)
@@ -42,10 +43,33 @@ Just copy the **library/status_cake_test.py** in your playbook folder
       with_dict:         "{{ example }}"
 ```
 
+## status_cake_ssl :: Example usage
+
+```
+- hosts:      localhost
+  vars_files: "dict_example.yml"
+
+  tasks:
+    - name: Create StatusCake SSL checks
+      status_cake_ssl:
+        username:       "example_user"            # StatusCake login name
+        api_key:        "som3thing1se3cret"       # StatusCake API key (cf: https://app.statuscake.com/APIKey.php)
+        state:          "present"                 # If present the task will try to create/update the test, if absent the task will delete the test
+        domain:         "{{ item.value.domain }}" # URL to check, has to start with https://
+        check_rate:     300                       # The number of seconds between checks, possible values: 300,600,3600,86400,2073600
+        contact:        "1234,42"                 # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
+        alert_at:       "59,60,61"                # When you wish to receive reminders (in days). Must be exactly 3 numeric values seperated by commas: first reminder, second reminder, final reminder
+        alert_reminder: true                      # Set to true to enable reminder alerts. False to disable. Also see alert_at
+        alert_expiry:   false                     # Set to true to enable expiration alerts. False to disable
+        alert_broken:   false                     # Set to true to enable broken alerts. False to disable
+        alert_mixed:    false                     # Set to true to enable mixed content alerts. False to disable
+      with_dict:        "{{ example_ssl }}"
+```
+
 
 ## Tips / Dirty quick win
 
-### How to use `post_raw` with a JSON
+### status_cake_test :: How to use `post_raw` with a JSON
 
 Your `post_raw` ansible variable should be declared with a leading space:
 
@@ -72,7 +96,7 @@ status_cake_test:
 - [ ] Role for Ansible galaxy
 - [ ] Edge cases
 - [ ] Add tests on some configurations and params (like json for `custom_header`)
-- [ ] [Manage SSL Tests](https://github.com/labynocle/ansible-statuscake/issues/5)
+- [x] [Manage SSL Tests](https://github.com/labynocle/ansible-statuscake/issues/5)
 
 
 ## Links

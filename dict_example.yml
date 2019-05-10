@@ -1,3 +1,9 @@
 example:
-  one:
+  google_home:
     url: 'www.google.com'
+
+example_ssl:
+  google:
+    domain: 'https://www.google.com'
+  lequipe:
+    domain: 'https://lequipe.fr'
