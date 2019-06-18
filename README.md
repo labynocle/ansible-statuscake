@@ -20,27 +20,29 @@ Just copy the **library/status_cake_*.py** in your playbook folder
   tasks:
     - name: Create StatusCake tests
       status_cake_test:
-        username:        "example_user"                       # StatusCake login name
-        api_key:         "som3thing1se3cret"                  # StatusCake API key (cf: https://app.statuscake.com/APIKey.php)
-        state:           "present"                            # If present the task will try to create/update the test, if absent the task will delete the test
-        name:            "{{ item.value.url }}"               # Website name
-        url:             "{{ item.value.url }}"               # Test location, either an IP (for TCP and Ping) or a fully qualified URL
-        test_tags:       "something,somethingelse,anotherone" # Tags should be seperated by a comma
-        test_type:       "HTTP"                               # What type of test type to use (HTTP/TCP/PING)
-        check_rate:      300                                  # The number of seconds between checks
-        trigger_rate:    5                                    # How many minutes to wait before sending an alert
-        confirmation:    5                                    # How many different servers are needed to confirm the downtime
-        user_agent:      "Status Cake Monitoring"             # Use to populate the test with a custom user agent
-        custom_header:                                        # Custom HTTP header, must be dict which will be sent as a JSON to StatusCake
+        username:           "example_user"                       # StatusCake login name
+        api_key:            "som3thing1se3cret"                  # StatusCake API key (cf: https://app.statuscake.com/APIKey.php)
+        state:              "present"                            # If present the task will try to create/update the test, if absent the task will delete the test
+        name:               "{{ item.value.url }}"               # Website name
+        url:                "{{ item.value.url }}"               # Test location, either an IP (for TCP and Ping) or a fully qualified URL
+        test_tags:          "something,somethingelse,anotherone" # Tags should be seperated by a comma
+        test_type:          "HTTP"                               # What type of test type to use (HTTP/TCP/PING)
+        check_rate:         300                                  # The number of seconds between checks
+        trigger_rate:       5                                    # How many minutes to wait before sending an alert
+        confirmation:       5                                    # How many different servers are needed to confirm the downtime
+        user_agent:         "Status Cake Monitoring"             # Use to populate the test with a custom user agent
+        custom_header:                                           # Custom HTTP header, must be dict which will be sent as a JSON to StatusCake
           Header01: Plop
           Header02: Plip
-        status_codes:    "200,204,205"                        # Comma seperated list of statusCodes to trigger error
-        node_locations:  "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
-        follow_redirect: 1                                    # Use to specify whether redirects should be followed, set to 1 to enable
-        contact:         "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
-        #find_string:    "plop"                               # A string that should either be found or not found.
-        #do_not_find:    0                                    # If the above string should be found to trigger a alert. 1 = will trigger if FindString found
-      with_dict:         "{{ example }}"
+        status_codes:       "200,204,205"                        # Comma seperated list of statusCodes to trigger error
+        node_locations:     "AU1,AU5,AU3"                        # Any test locations seperated by a comma (using the Node Location IDs)
+        paused:             0                                    # Put the test on paused . default 0 = unpaused
+        enable_ssl_alert:   0                                    # Enable ssl check. default 0 = no ssl check
+        follow_redirect:    1                                    # Use to specify whether redirects should be followed, set to 1 to enable
+        contact:            "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
+        #find_string:       "plop"                               # A string that should either be found or not found.
+        #do_not_find:       0                                    # If the above string should be found to trigger a alert. 1 = will trigger if FindString found
+      with_dict:            "{{ example }}"
 ```
 
 ## status_cake_ssl :: Example usage

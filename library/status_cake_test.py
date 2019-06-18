@@ -7,7 +7,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 class StatusCake:
     def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                 status_codes, node_locations, follow_redirect, trigger_rate, confirmation, final_location, do_not_find, find_string,
+                 status_codes, node_locations, follow_redirect, enable_ssl_alert, paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
                  custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
@@ -22,6 +22,8 @@ class StatusCake:
         self.tcp_port = tcp_port
         self.user_agent = user_agent
         self.check_rate = check_rate
+        self.paused = paused
+        self.enable_ssl_alert = enable_ssl_alert
         self.follow_redirect = follow_redirect
         self.trigger_rate = trigger_rate
         self.confirmation = confirmation
@@ -51,7 +53,7 @@ class StatusCake:
         data = {
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
             "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
-            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "TriggerRate": self.trigger_rate, "Confirmation": self.confirmation,
+            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "EnableSSLAlert": self.enable_ssl_alert, "Paused": self.paused,"TriggerRate": self.trigger_rate, "Confirmation": self.confirmation,
             "FinalEndpoint": self.final_location, "DoNotFind": self.do_not_find, "FindString": self.find_string, "PostRaw": self.post_raw
         }
         if self.custom_header:
@@ -86,6 +88,8 @@ def main():
         "status_codes": {"required": False, "type": "str"},
         "node_locations": {"required": False, "type": "str"},
         "follow_redirect": {"required": False, "type": "str"},
+        "enable_ssl_alert": {"required": False, "type": "int"},
+        "paused": {"required": False, "type": "int"},
         "trigger_rate": {"required": False, "type": "str"},
         "confirmation": {"required": False, "type": "str"},
         "check_rate": {"required": False, "default": 300, "type": "int"},
@@ -117,6 +121,8 @@ def main():
     tcp_port = module.params['port']
     user_agent = module.params['user_agent']
     follow_redirect = module.params['follow_redirect']
+    enable_ssl_alert = module.params['enable_ssl_alert']
+    paused = module.params['paused']
     trigger_rate = module.params['trigger_rate']
     confirmation = module.params['confirmation']
     final_location = module.params['final_location']
@@ -132,7 +138,7 @@ def main():
         post_body = json.dumps(post_body)
 
     test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                             status_codes, node_locations, follow_redirect, trigger_rate, confirmation, final_location, do_not_find, find_string,
+                             status_codes, node_locations, follow_redirect, enable_ssl_alert, paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
                              custom_header, post_body, post_raw)
     test_object.manage_test()
 
