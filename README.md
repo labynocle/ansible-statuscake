@@ -104,3 +104,4 @@ status_cake_test:
 ## Links
 
 * [StatusCake API Doc](https://www.statuscake.com/api/Tests/Updating%20Inserting%20and%20Deleting%20Tests.md)
+* [Comment automatiser le monitoring de nos 200 stacks clients en un déploiement ?](https://toucantoco.com/en/tech-blog/tech/ansible_monitoring)
