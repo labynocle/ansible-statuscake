@@ -80,7 +80,7 @@ class StatusCake:
 def main():
     fields = {
         "username": {"required": True, "type": "str"},
-        "api_key": {"required": True, "type": "str"},
+        "api_key": {"required": True, "type": "str", no_log=True},
         "name": {"required": True, "type": "str"},
         "url": {"required": True, "type": "str"},
         "state": {"required": True, "choices": ['present', 'absent'], "type": "str"},
