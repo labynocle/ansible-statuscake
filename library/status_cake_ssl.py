@@ -65,7 +65,7 @@ class StatusCakeSSL:
 def main():
     fields = {
         "username": {"required": True, "type": "str"},
-        "api_key": {"required": True, "type": "str", no_log=True},
+        "api_key": {"required": True, "type": "str", "no_log":True},
         "domain": {"required": True, "type": "str"},
         "state": {"required": True, "choices": ['present', 'absent'], "type": "str"},
         "contact": {"required": True, "type": "int"},
