@@ -7,3 +7,9 @@ example_ssl:
     domain: 'https://www.google.com'
   lequipe:
     domain: 'https://lequipe.fr'
+
+example_pagespeed:
+  aleikoum:
+    url: 'http://www.aleikoum.net'
+  butwhy:
+    url: 'https://but-why.live'
