@@ -77,7 +77,7 @@ Just copy the **library/status_cake_*.py** in your playbook folder
 
   tasks:
     - name: Create StatusCake Pagespeed checks
-      status_cake_ssl:
+      status_cake_pagespeed:
         username:      "example_user"              # StatusCake login name
         api_key:       "som3thing1se3cret"         # StatusCake API key (cf: https://app.statuscake.com/APIKey.php)
         state:         present                     # If present the task will try to create/update the test, if absent the task will delete the test
