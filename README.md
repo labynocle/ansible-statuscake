@@ -42,6 +42,8 @@ Just copy the **library/status_cake_*.py** in your playbook folder
         contact:            "1234,42"                            # Contact group ID assoicated with account to use. Comma separation for multiple IDs.
         #find_string:       "plop"                               # A string that should either be found or not found.
         #do_not_find:       0                                    # If the above string should be found to trigger a alert. 1 = will trigger if FindString found
+        #basicuser:         "myUser"                             # A Basic Auth User account to use to login
+        #basicpass:         "myPassw0rd"                         # If BasicUser is set then this should be the password for the BasicUser
       loop:                 "{{ example | dict2items }}"
 ```
 

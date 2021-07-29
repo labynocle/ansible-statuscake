@@ -6,8 +6,10 @@ from ansible.module_utils.basic import AnsibleModule
 
 
 class StatusCake:
-    def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                 status_codes, node_locations, follow_redirect, enable_ssl_alert, paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
+    def __init__(self, module, username, api_key, name, url, state, test_tags, check_rate, test_type,
+                 contact, tcp_port, user_agent, basicuser, basicpass,
+                 status_codes, node_locations, follow_redirect, enable_ssl_alert,
+                 paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
                  custom_header, post_body, post_raw):
         self.headers = {"Username": username, "API": api_key}
         self.module = module
@@ -18,6 +20,8 @@ class StatusCake:
         self.status_codes = status_codes
         self.node_locations = node_locations
         self.test_type = test_type
+        self.basicuser = basicuser
+        self.basicpass = basicpass
         self.contact = contact
         self.tcp_port = tcp_port
         self.user_agent = user_agent
@@ -52,9 +56,12 @@ class StatusCake:
     def manage_test(self):
         data = {
             "WebsiteName": self.name, "WebsiteURL": self.url, "CheckRate": self.check_rate, "TestType": self.test_type,
-            "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations, "ContactGroup": self.contact,
-            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect, "EnableSSLAlert": self.enable_ssl_alert, "Paused": self.paused,"TriggerRate": self.trigger_rate, "Confirmation": self.confirmation,
-            "FinalEndpoint": self.final_location, "DoNotFind": self.do_not_find, "FindString": self.find_string, "PostRaw": self.post_raw
+            "TestTags": self.test_tags, "StatusCodes": self.status_codes, "NodeLocations": self.node_locations,
+            "ContactGroup": self.contact, "BasicUser": self.basicuser, "BasicPass": self.basicpass,
+            "Port": self.tcp_port, "UserAgent": self.user_agent, "FollowRedirect": self.follow_redirect,
+            "EnableSSLAlert": self.enable_ssl_alert, "Paused": self.paused,"TriggerRate": self.trigger_rate,
+            "Confirmation": self.confirmation, "FinalEndpoint": self.final_location, "DoNotFind": self.do_not_find,
+            "FindString": self.find_string, "PostRaw": self.post_raw
         }
         if self.custom_header:
             data['CustomHeader'] = self.custom_header
@@ -94,6 +101,8 @@ def main():
         "confirmation": {"required": False, "type": "str"},
         "check_rate": {"required": False, "default": 300, "type": "int"},
         "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'], "type": "str"},
+        "basicuser": {"required": False, "default": "", "type": "str"},
+        "basicpass": {"required": False, "default": "", "type": "str"},
         "contact": {"required": False, "type": "int"},
         "port": {"required": False, "type": "int"},
         "user_agent": {"required": False, "default": "StatusCake Agent", "type": "str"},
@@ -117,6 +126,8 @@ def main():
     node_locations = module.params['node_locations']
     check_rate = module.params['check_rate']
     test_type = module.params['test_type']
+    basicuser = module.params['basicuser']
+    basicpass = module.params['basicpass']
     contact = module.params['contact']
     tcp_port = module.params['port']
     user_agent = module.params['user_agent']
@@ -137,8 +148,10 @@ def main():
     if post_body:
         post_body = json.dumps(post_body)
 
-    test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type, contact, tcp_port, user_agent,
-                             status_codes, node_locations, follow_redirect, enable_ssl_alert, paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
+    test_object = StatusCake(module, username, api_key, name, url, state, test_tags, check_rate, test_type,
+                             contact, tcp_port, user_agent, basicuser, basicpass,
+                             status_codes, node_locations, follow_redirect, enable_ssl_alert,
+                             paused, trigger_rate, confirmation, final_location, do_not_find, find_string,
                              custom_header, post_body, post_raw)
     test_object.manage_test()
 
