@@ -2,6 +2,11 @@
 
 This Ansible module setups/deletes a HTTP/TCP/PING test or a SSL certificate check via the [StatusCake](https://www.statuscake.com) API.
 
+:warning: the 30/09/2022th, the API used by this module will be deprecated.
+I already start a MR to migrate to the new one, you can follow the work on
+this MR: [feat: use APIv1](https://github.com/labynocle/ansible-statuscake/pull/13).
+I try my best to be on time :pray:
+
 ## Requirements
 
 * Ansible >=2.1
