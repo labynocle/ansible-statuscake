@@ -1,0 +1,7 @@
+{
+    "ANSIBLE_MODULE_ARGS": {
+        "api_key": "__STATUSCAKE_API_KEY__",
+        "name": "My first uptime :: google.com",
+        "state": "absent"
+    }
+}

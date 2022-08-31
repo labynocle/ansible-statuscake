@@ -1,0 +1,16 @@
+{
+    "ANSIBLE_MODULE_ARGS": {
+        "api_key": "__STATUSCAKE_API_KEY__",
+        "name": "My first uptime :: google.com",
+        "state": "present",
+        "test_type": "HTTP",
+        "website_url": "https://www.google.com",
+        "check_rate": 3600,
+        "status_codes_csv": "401,403,404",
+        "user_agent": "Test ansible",
+        "tags": "toto,titi",
+        "follow_redirects": true,
+        "trigger_rate": 10,
+        "confirmation": 2
+    }
+}
