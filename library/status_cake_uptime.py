@@ -4,7 +4,6 @@ import json
 import requests
 from ansible.module_utils.basic import AnsibleModule
 
-
 class StatusCake:
     def __init__(self, module, api_key, name, website_url, state, tags, status_codes_csv,
                             regions, check_rate, test_type, basic_username, basic_password, contact_groups,
@@ -40,11 +39,6 @@ class StatusCake:
         self.post_body = post_body
         self.post_raw = post_raw
 
-    def check_response(self, resp):
-        if resp['data']['new_id'] is False:
-            self.module.exit_json(changed=False, meta=resp['Message'])
-        else:
-            self.module.exit_json(changed=True, meta=resp['Message'])
 
     def check_if_exist(self, page_index=1):
         params = {
@@ -69,14 +63,14 @@ class StatusCake:
             "name": self.name,
             "website_url": self.website_url,
             "state": self.state,
-            "tags_csv": self.tags,
+            "tags[]": self.tags,
             "status_codes_csv": self.status_codes_csv,
             "regions": self.regions,
             "check_rate": self.check_rate,
             "test_type": self.test_type,
             "basic_username": self.basic_username,
             "basic_password": self.basic_password,
-            "contact_groups_csv": self.contact_groups,
+            "contact_groups[]": self.contact_groups,
             "tcp_port": self.tcp_port,
             "user_agent": self.user_agent,
             "follow_redirects": self.follow_redirects,
@@ -123,14 +117,14 @@ def main():
         "name": {"required": True, "type": "str"},
         "website_url": {"required": True, "type": "str"},
         "state": {"required": True, "choices": ['present', 'absent'], "type": "str"},
-        "tags": {"required": False, "type": "str"},
+        "tags": {"required": False, "type": "list"},
         "status_codes_csv": {"required": False, "type": "str"},
         "regions": {"required": False, "type": "str"},
         "check_rate": {"required": False, "choices": [30, 60, 300, 900, 1800, 3600, 86400], "default": 300, "type": "int"},
         "test_type": {"required": False, "choices": ['HTTP', 'TCP', 'PING'], "type": "str"},
         "basic_username": {"required": False, "default": "", "type": "str"},
         "basic_password": {"required": False, "default": "", "type": "str", "no_log": True},
-        "contact_groups": {"required": False, "type": "str"},
+        "contact_groups": {"required": False, "type": "list"},
         "port": {"required": False, "type": "int"},
         "user_agent": {"required": False, "default": "StatusCake Agent", "type": "str"},
         "follow_redirects": {"required": False, "default": False, "type": "bool"},

@@ -24,12 +24,17 @@ Just copy the **library/status_cake_*.py** in your playbook folder
         name: "Test for my website"                # Mandatory - Name of the check
         website_url: "https://mywebsite.com"       # Mandatory - URL or IP address of the server under test
         status_codes_csv: "404,500"                # Comma separated list of status codes that trigger an alert
-        tags: "something,somethingelse,anotherone" # Comma separated list of tags
+        tags:                                      # List of tags
+          - "something"
+          - "somethingelse"
+          - "anotherone"
         check_rate: 300                            # Number of seconds between checks
         test_type: "HTTP"                          # Uptime check type (HTTP/TCP/PING)
         # basic_username: "myUser"                 # Basic authentication username
         # basic_password: "myPassw0rd"             # Basic authentication password
-        contact_groups: "1234,42"                  # Comma separated list of contact group IDs
+        contact_groups:                            # List of contact group IDs
+          - 1234
+          - 42
         # port: 8080                               # Destination port for TCP checks
         user_agent: "Status Cake Monitoring"       # Custom user agent string set when testing
         follow_redirect: true                      # Whether to follow redirects when testing. Disabled by default
