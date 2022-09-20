@@ -42,6 +42,9 @@ Just copy the **library/status_cake_*.py** in your playbook folder
         paused: true                               # Whether the check should be run - Disabled by default
         trigger_rate: 5                            # The number of minutes to wait before sending an alert - Default is 0
         confirmation: 5                            # Number of confirmation servers to confirm downtime before an alert is triggered - Default is 2
+        regions:                                   # List of regions on which to run checks (retrieved from the GET /v1/uptime-locations endpoint)
+          - "sao-polo"
+          - "singapore"
         # find_string: "plop"                      # String to look for within the response. Considered down if not found
         # do_not_find: false                       # Whether to consider the check as down if the content is present within the response - Disabled by default
         # custom_header:                           # JSON object. Represents headers to be sent when making requests

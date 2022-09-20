@@ -8,7 +8,8 @@
         "check_rate": 3600,
         "status_codes_csv": "401,403,404",
         "user_agent": "Test ansible",
-        "tags": ['toto','titi','tata'],
+        "tags": ["toto","titi","tata"],
+        "regions": ["sao-paulo"],
         "follow_redirects": true,
         "trigger_rate": 10,
         "confirmation": 2
